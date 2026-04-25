@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>服事表 — TC AA112 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --accent: #e05a00; --accent-light: #fff7f4; --accent-border: #f0997b66;
+  --bg: #f5f3ef; --surface: #eceae5; --white: #ffffff;
+  --text: #1a1a1a; --text-muted: #888; --text-faint: #bbb;
+  --border: #d8d5cf; --border-light: #e8e5e0; --sidebar-w: 52px;
+}
+html, body { height: 100%; background: var(--bg); font-family: 'Noto Sans TC', sans-serif; color: var(--text); }
+.app { display: flex; height: 100vh; overflow: hidden; }
+
+/* SIDEBAR */
+.sidebar { width: var(--sidebar-w); background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 20px 0 12px; flex-shrink: 0; z-index: 10; position: relative; }
+.sidebar-top { display: flex; flex-direction: column; align-items: center; flex: 1; gap: 2px; }
+.sidebar-label { font-size: 12px; font-weight: 700; color: var(--text-muted); letter-spacing: 3px; writing-mode: vertical-rl; text-orientation: upright; margin-bottom: 20px; }
+.tab-btn { width: 38px; padding: 12px 0; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--text-muted); cursor: pointer; border-radius: 5px; border: none; background: transparent; transition: background 0.15s, color 0.15s; writing-mode: vertical-rl; text-orientation: mixed; letter-spacing: 1px; font-family: 'Noto Sans TC', sans-serif; }
+.tab-btn:hover { background: var(--border-light); color: var(--text); }
+.tab-btn.active { background: var(--accent); color: #fff; }
+.sidebar-divider { width: 28px; height: 1px; background: var(--border); margin: 8px 0; }
+.profile-tab-btn { width: 38px; height: 44px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; cursor: pointer; border-radius: 5px; border: none; background: transparent; color: var(--text-muted); font-size: 9px; font-weight: 700; letter-spacing: 0.5px; transition: background 0.15s, color 0.15s; font-family: 'Noto Sans TC', sans-serif; line-height: 1; }
+.profile-tab-btn:hover { background: var(--border-light); color: var(--text); }
+.profile-tab-btn.active { background: var(--text); color: #fff; }
+
+/* PAGES */
+.page { flex: 1; display: none; flex-direction: column; overflow: hidden; background: var(--bg); }
+.page.active { display: flex; }
+
+/* SCHEDULE */
+.header { padding: 28px 36px 0; flex-shrink: 0; position: relative; }
+.top-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; align-items: center; }
+.month-en { font-family: 'Bebas Neue', sans-serif; font-size: 80px; color: var(--text); line-height: 0.9; letter-spacing: 1px; }
+.month-sub { font-size: 13px; color: var(--text-muted); margin-top: 6px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1.5px solid var(--border); }
+.table-wrap { flex: 1; overflow-x: auto; overflow-y: auto; padding: 0 36px 32px; }
+table { border-collapse: collapse; min-width: 100%; }
+thead th { padding: 0; vertical-align: bottom; background: var(--bg); position: sticky; top: 0; z-index: 5; }
+thead th:first-child { width: 90px; min-width: 90px; }
+.col-head-inner { padding: 10px 10px 12px; border-bottom: 1.5px solid var(--border); text-align: center; min-width: 110px; }
+.col-wk { font-size: 11px; color: var(--accent); font-weight: 700; }
+.col-date { font-size: 16px; font-weight: 700; color: var(--text); margin: 2px 0; }
+.col-day { font-size: 10px; color: var(--text-faint); }
+.row-label { font-size: 12px; color: var(--text-muted); text-align: right; padding: 8px 12px 8px 0; white-space: nowrap; vertical-align: middle; border-right: 1.5px solid var(--border); background: var(--bg); position: sticky; left: 0; z-index: 3; }
+.row-label.type-label { color: var(--accent); font-weight: 700; }
+tbody tr td { padding: 7px 8px; vertical-align: middle; border-bottom: 1px solid var(--border-light); }
+tbody tr.type-row td { border-bottom: 1.5px solid var(--border); padding-bottom: 10px; padding-top: 10px; }
+.cell-select { width: 100%; min-width: 90px; background: var(--white); border: 1px solid var(--border); border-radius: 7px; padding: 7px 26px 7px 9px; font-size: 13px; color: var(--text); font-family: 'Noto Sans TC', sans-serif; cursor: pointer; appearance: none; -webkit-appearance: none; outline: none; transition: border-color 0.15s, box-shadow 0.15s; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23aaa'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 9px center; }
+.cell-select:hover { border-color: #bbb; }
+.cell-select:focus { border-color: var(--accent); box-shadow: 0 0 0 2px #e05a0020; }
+.cell-select.type-sel { background-color: var(--accent-light); border-color: var(--accent-border); color: #993c1d; font-weight: 700; }
+.cell-select option[value=""] { color: #bbb; }
+tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
+.table-wrap::-webkit-scrollbar { width: 5px; height: 5px; }
+.table-wrap::-webkit-scrollbar-track { background: transparent; }
+.table-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 9px; }
+
+/* SYNC INDICATOR */
+.sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #bbb; display: inline-block; margin-right: 5px; transition: background 0.3s; }
+.sync-dot.synced { background: #4caf50; }
+.sync-dot.syncing { background: #ff9800; }
+.sync-label { font-size: 11px; color: var(--text-muted); }
+
+/* PROFILE PAGE */
+.profile-page { flex: 1; display: none; flex-direction: column; overflow: hidden; background: var(--bg); }
+.profile-page.active { display: flex; }
+.profile-header { padding: 24px 32px 0; flex-shrink: 0; }
+.profile-top-bar { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.6; }
+.profile-title-row { display: flex; align-items: baseline; gap: 14px; border-bottom: 2px solid var(--text); padding-bottom: 8px; }
+.title-solid { font-family: 'Bebas Neue', sans-serif; font-size: 60px; color: var(--text); line-height: 1; letter-spacing: 2px; }
+.title-outline { font-family: 'Bebas Neue', sans-serif; font-size: 60px; -webkit-text-stroke: 2px var(--text); color: transparent; line-height: 1; letter-spacing: 2px; }
+.profile-grid-wrap { flex: 1; overflow-y: auto; padding: 0 32px 20px; }
+.profile-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-left: 1px solid var(--border); border-top: 1px solid var(--border); }
+.member-card { border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.photo-area { background: #252525; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; cursor: pointer; }
+.photo-area img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
+.char-bg { font-size: 60px; color: #444; font-weight: 700; user-select: none; pointer-events: none; }
+.photo-hover { position: absolute; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; font-size: 11px; color: #fff; }
+.photo-area:hover .photo-hover { opacity: 1; }
+.card-info { padding: 7px 10px 10px; background: var(--bg); }
+.card-no { font-size: 10px; color: var(--text-muted); margin-bottom: 1px; }
+.card-name { font-size: 15px; font-weight: 700; color: var(--text); cursor: pointer; display: inline-block; border-bottom: 1px dashed transparent; transition: border-color 0.15s; }
+.card-name:hover { border-bottom-color: #aaa; }
+.card-role { font-size: 11px; color: #e05a00; font-weight: 700; cursor: pointer; display: inline-block; }
+.profile-footer { padding: 12px 32px 16px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); flex-shrink: 0; background: var(--bg); }
+.count-label { font-size: 12px; color: #888; }
+.add-btn { border: 1.5px solid var(--text); background: transparent; padding: 9px 20px; font-size: 13px; font-weight: 700; letter-spacing: 1px; cursor: pointer; border-radius: 999px; font-family: 'Noto Sans TC', sans-serif; transition: background 0.15s, color 0.15s; color: var(--text); }
+.add-btn:hover { background: var(--text); color: var(--bg); }
+
+/* MODAL */
+.modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
+.modal-bg.open { display: flex; }
+.modal { background: var(--bg); padding: 24px; width: 340px; border-radius: 6px; }
+.modal h3 { font-size: 15px; font-weight: 700; margin-bottom: 16px; color: var(--text); }
+.modal label { display: block; font-size: 11px; color: #888; margin-top: 10px; margin-bottom: 3px; }
+.modal input { width: 100%; border: 1px solid #ccc; background: #fff; padding: 7px 10px; font-size: 13px; font-family: 'Noto Sans TC', sans-serif; border-radius: 4px; outline: none; color: #1a1a1a; }
+.modal-actions { display: flex; gap: 8px; margin-top: 18px; justify-content: flex-end; }
+.btn-cancel { border: 1px solid #ccc; background: transparent; padding: 7px 16px; font-size: 12px; cursor: pointer; border-radius: 4px; font-family: 'Noto Sans TC', sans-serif; color: #666; }
+.btn-save { border: none; background: #e05a00; color: #fff; padding: 7px 16px; font-size: 12px; cursor: pointer; border-radius: 4px; font-family: 'Noto Sans TC', sans-serif; font-weight: 700; }
+.btn-delete { border: 1px solid #c33; background: transparent; color: #c33; padding: 7px 16px; font-size: 12px; cursor: pointer; border-radius: 4px; font-family: 'Noto Sans TC', sans-serif; margin-right: auto; }
+.file-input { display: none; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-top">
+      <div class="sidebar-label">服事表</div>
+      <div id="monthTabs" style="display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;"></div>
+      <button id="addMonthBtn" onclick="openAddMonth()" title="新增月份" style="width:34px;height:34px;border-radius:5px;border:1.5px dashed var(--border);background:transparent;color:var(--text-muted);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:4px;transition:border-color 0.15s,color 0.15s;" onmouseenter="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseleave="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">+</button>
+    </div>
+    <div class="sidebar-divider"></div>
+    <button class="profile-tab-btn" id="tab-PROFILE" onclick="switchPage('PROFILE')"><span>組員</span></button>
+  </div>
+
+  <!-- SCHEDULE PAGE -->
+  <div class="page active" id="page-SCHEDULE">
+    <div class="header">
+      <div class="top-meta">
+        <span>TC AA112 · 2026 春季</span>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span><span class="sync-dot" id="syncDot"></span><span class="sync-label" id="syncLabel">連線中...</span></span>
+          <button id="leaderLoginBtn" onclick="toggleLeaderLogin()" style="border:1px solid var(--border);background:transparent;border-radius:6px;padding:4px 12px;font-size:11px;font-weight:700;color:var(--text-muted);cursor:pointer;font-family:inherit;transition:all 0.15s;" onmouseenter="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseleave="if(!window._isLeader){this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'}">小組長登入</button>
+        </div>
+      </div>
+      <div id="leaderLoginBox" style="display:none;position:absolute;right:36px;top:70px;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:14px 16px;z-index:50;width:200px;box-shadow:0 4px 16px rgba(0,0,0,0.08);">
+        <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">輸入小組長密碼</div>
+        <input id="leaderPwInput" type="password" placeholder="密碼" onkeydown="if(event.key==='Enter')submitLeaderLogin()" style="width:100%;border:1px solid var(--border);border-radius:5px;padding:6px 8px;font-size:13px;font-family:inherit;outline:none;color:var(--text);background:var(--bg);margin-bottom:8px;" />
+        <button onclick="submitLeaderLogin()" style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:5px;padding:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">確認</button>
+        <div id="leaderPwError" style="font-size:11px;color:#c33;margin-top:6px;display:none;">密碼錯誤</div>
+      </div>
+      <div class="month-en" id="monthEn">MAY</div>
+      <div class="month-sub" id="monthSub">2026 — 五月 · 每週三</div>
+    </div>
+    <div class="table-wrap"><table id="scheduleTable"></table></div>
+  </div>
+
+  <!-- MEMBER PROFILE PAGE -->
+  <div class="profile-page" id="page-PROFILE">
+    <div class="profile-header">
+      <div class="profile-top-bar">
+        <div><div>TC AA112</div><div>2026 春季</div></div>
+        <div style="text-align:right"><div id="profileCount">共 8 位組員</div></div>
+      </div>
+      <div class="profile-title-row">
+        <span class="title-solid">MEMBER</span>
+        <span class="title-outline">PROFILE</span>
+      </div>
+    </div>
+    <div class="profile-grid-wrap"><div class="profile-grid" id="profileGrid"></div></div>
+    <div class="profile-footer">
+      <div class="count-label" id="profileCount2">共 8 位組員</div>
+      <button class="add-btn" onclick="openAddModal()">+ ADD 組員</button>
+    </div>
+  </div>
+
+  <!-- ADD MONTH MODAL -->
+  <div id="addMonthOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:150;align-items:center;justify-content:center;">
+    <div style="background:var(--bg);border-radius:10px;padding:24px;width:280px;border:1px solid var(--border);">
+      <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:16px;">新增月份</div>
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">年份</div>
+      <input id="addMonthYear" type="number" min="2020" max="2099" value="2026" style="width:100%;border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-size:13px;font-family:inherit;outline:none;color:var(--text);background:var(--white);margin-bottom:10px;" />
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">月份</div>
+      <select id="addMonthSel" style="width:100%;border:1px solid var(--border);border-radius:6px;padding:7px 10px;font-size:13px;font-family:inherit;outline:none;color:var(--text);background:var(--white);appearance:none;-webkit-appearance:none;margin-bottom:10px;cursor:pointer;">
+        <option value="">— 選擇月份 —</option>
+        <option value="1">一月 (JAN)</option><option value="2">二月 (FEB)</option>
+        <option value="3">三月 (MAR)</option><option value="4">四月 (APR)</option>
+        <option value="5">五月 (MAY)</option><option value="6">六月 (JUN)</option>
+        <option value="7">七月 (JUL)</option><option value="8">八月 (AUG)</option>
+        <option value="9">九月 (SEP)</option><option value="10">十月 (OCT)</option>
+        <option value="11">十一月 (NOV)</option><option value="12">十二月 (DEC)</option>
+      </select>
+      <div id="addMonthError" style="display:none;font-size:11px;color:#c33;margin-bottom:8px;">請選擇有效月份</div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button onclick="closeAddMonth()" style="border:1px solid var(--border);background:transparent;border-radius:6px;padding:7px 14px;font-size:12px;cursor:pointer;font-family:inherit;color:var(--text-muted);">取消</button>
+        <button onclick="confirmAddMonth()" style="border:none;background:var(--accent);color:#fff;border-radius:6px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">新增</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h3 id="modalTitle" style="margin-bottom:16px;">編輯組員</h3>
+    <div id="leaderFields">
+      <label>姓名</label><input type="text" id="editName" placeholder="組員姓名" />
+      <label>組別</label><input type="text" id="editRole" placeholder="e.g. 影視組、小家長" />
+    </div>
+    <div id="memberOnlyNote" style="display:none;"></div>
+    <label>上傳照片</label>
+    <input type="file" class="file-input" id="photoInput" accept="image/*" onchange="handlePhoto(event)" />
+    <button class="add-btn" style="width:100%;border-radius:4px;margin-top:6px;font-size:12px;padding:7px;" onclick="document.getElementById('photoInput').click()">選擇照片</button>
+    <div id="photoPreview" style="margin-top:6px;font-size:11px;color:#999;"></div>
+    <div class="modal-actions">
+      <button class="btn-delete" id="deleteBtn" onclick="deleteMember()">刪除組員</button>
+      <button class="btn-cancel" onclick="closeModal()">取消</button>
+      <button class="btn-save" onclick="saveMember()">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBNSPanMXR6u8zp943lwQBQEGY_j1hOahs",
+  authDomain: "tc-aa112.firebaseapp.com",
+  databaseURL: "https://tc-aa112-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "tc-aa112",
+  storageBucket: "tc-aa112.firebasestorage.app",
+  messagingSenderId: "874159298659",
+  appId: "1:874159298659:web:8d616ba02b512fd2254056"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// ── SYNC STATE ──
+function setSyncStatus(status) {
+  const dot = document.getElementById('syncDot');
+  const label = document.getElementById('syncLabel');
+  if (status === 'synced') { dot.className = 'sync-dot synced'; label.textContent = '已同步'; }
+  else if (status === 'syncing') { dot.className = 'sync-dot syncing'; label.textContent = '同步中...'; }
+  else { dot.className = 'sync-dot'; label.textContent = '連線中...'; }
+}
+
+// ── DATA ──
+let memberData = [];
+let saved = {};
+let monthOrder = [];
+let currentPage = 'SCHEDULE';
+let currentScheduleTab = '';
+let editingIdx = -1;
+let tempPhoto = null;
+let _suppressSave = false;
+
+const activityTypes = ['信息','禱告會','探訪','走禱','團契'];
+const rows = ['破冰','敬拜讚美','講道／分享','場地確認'];
+const MONTH_META = {
+  1:{en:'JAN',zh:'一月'},2:{en:'FEB',zh:'二月'},3:{en:'MAR',zh:'三月'},4:{en:'APR',zh:'四月'},
+  5:{en:'MAY',zh:'五月'},6:{en:'JUN',zh:'六月'},7:{en:'JUL',zh:'七月'},8:{en:'AUG',zh:'八月'},
+  9:{en:'SEP',zh:'九月'},10:{en:'OCT',zh:'十月'},11:{en:'NOV',zh:'十一月'},12:{en:'DEC',zh:'十二月'},
+};
+
+function getWednesdays(year, month) {
+  const r = []; const d = new Date(year, month-1, 1);
+  while (d.getDay() !== 3) d.setDate(d.getDate()+1);
+  let wk = 1;
+  while (d.getMonth() === month-1) {
+    r.push({ wk: 'WK '+wk, date: `${month}/${d.getDate()}` });
+    d.setDate(d.getDate()+7); wk++;
+  }
+  return r;
+}
+
+function monthKeyLabel(key) {
+  const [y, m] = key.split('-');
+  return MONTH_META[parseInt(m)].en;
+}
+
+function monthKeyMeta(key) {
+  const [y, m] = key.split('-');
+  const meta = MONTH_META[parseInt(m)];
+  return { en: meta.en, zh: `${y} — ${meta.zh}`, weeks: getWednesdays(parseInt(y), parseInt(m)) };
+}
+
+// ── FIREBASE LISTENERS ──
+// Members
+onValue(ref(db, 'members'), snap => {
+  const data = snap.val();
+  if (data) {
+    memberData = Object.values(data).sort((a,b) => (a.order||0)-(b.order||0));
+  } else {
+    // First run: seed default members
+    const defaults = ['守仁','千千','洛克','惠絲','哲倫','恩可','好恩','瀚元'];
+    const roles = {守仁:'影視組',千千:'影視組',洛克:'影視組',惠絲:'小家長',哲倫:'小家長'};
+    memberData = defaults.map((n,i) => ({ name: n, role: roles[n]||'', photo: null, order: i }));
+    set(ref(db, 'members'), Object.fromEntries(memberData.map((m,i) => [i, m])));
+  }
+  if (currentPage === 'PROFILE') renderProfile();
+  setSyncStatus('synced');
+});
+
+// Schedule data
+onValue(ref(db, 'schedule'), snap => {
+  const data = snap.val() || {};
+  _suppressSave = true;
+  saved = data;
+  _suppressSave = false;
+  if (currentPage === 'SCHEDULE' && currentScheduleTab) renderSchedule();
+  setSyncStatus('synced');
+});
+
+// Month list
+onValue(ref(db, 'months'), snap => {
+  const data = snap.val();
+  if (data) {
+    monthOrder = data;
+  } else {
+    // First run: seed default months
+    monthOrder = ['2026-05','2026-06','2026-07'];
+    set(ref(db, 'months'), monthOrder);
+  }
+  renderSidebarTabs();
+  if (!currentScheduleTab && monthOrder.length) {
+    currentScheduleTab = monthOrder[0];
+    renderSchedule();
+  }
+  setSyncStatus('synced');
+});
+
+// ── SAVE TO FIREBASE ──
+function saveCell(k, val) {
+  if (_suppressSave) return;
+  saved[k] = val;
+  setSyncStatus('syncing');
+  update(ref(db, 'schedule'), { [k]: val }).then(() => setSyncStatus('synced'));
+}
+
+function saveMembers() {
+  setSyncStatus('syncing');
+  set(ref(db, 'members'), Object.fromEntries(memberData.map((m,i) => [i, {...m, order:i}])))
+    .then(() => setSyncStatus('synced'));
+}
+
+function saveMonths() {
+  setSyncStatus('syncing');
+  set(ref(db, 'months'), monthOrder).then(() => setSyncStatus('synced'));
+}
+
+// ── SIDEBAR ──
+function renderSidebarTabs() {
+  const container = document.getElementById('monthTabs');
+  container.innerHTML = monthOrder.map(key =>
+    `<button class="tab-btn${key === currentScheduleTab ? ' active' : ''}" onclick="switchSchedule('${key}')">${monthKeyLabel(key)}</button>`
+  ).join('');
+}
+
+window.switchSchedule = function(tab) {
+  currentScheduleTab = tab;
+  currentPage = 'SCHEDULE';
+  document.querySelectorAll('.page, .profile-page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-SCHEDULE').classList.add('active');
+  document.getElementById('tab-PROFILE').classList.remove('active');
+  renderSidebarTabs();
+  renderSchedule();
+};
+
+window.switchPage = function(page) {
+  currentPage = page;
+  document.querySelectorAll('.page, .profile-page').forEach(p => p.classList.remove('active'));
+  if (page === 'PROFILE') {
+    document.getElementById('page-PROFILE').classList.add('active');
+    document.getElementById('tab-PROFILE').classList.add('active');
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    renderProfile();
+  }
+};
+
+// ── SCHEDULE ──
+function renderSchedule() {
+  if (!currentScheduleTab || !monthOrder.includes(currentScheduleTab)) return;
+  const m = monthKeyMeta(currentScheduleTab);
+  document.getElementById('monthEn').textContent = m.en;
+  document.getElementById('monthSub').textContent = m.zh + ' · 每週三';
+  const weeks = m.weeks;
+  let html = '<thead><tr><th><div style="height:60px;"></div></th>';
+  weeks.forEach(w => {
+    html += `<th><div class="col-head-inner"><div class="col-wk">${w.wk}</div><div class="col-date">${w.date}</div><div class="col-day">週三</div></div></th>`;
+  });
+  html += '</tr></thead><tbody>';
+  html += `<tr class="type-row"><td class="row-label type-label">小組內容</td>`;
+  weeks.forEach((w,wi) => {
+    const k = `${currentScheduleTab}|type|${wi}`;
+    const v = saved[k] || '';
+    html += `<td><select class="cell-select type-sel" onchange="window._saveCell('${k}',this.value)"><option value="">— 類型 —</option>${activityTypes.map(t=>`<option value="${t}"${v===t?' selected':''}>${t}</option>`).join('')}</select></td>`;
+  });
+  html += '</tr>';
+  rows.forEach(row => {
+    html += `<tr><td class="row-label">${row}</td>`;
+    weeks.forEach((w,wi) => {
+      const k = `${currentScheduleTab}|${row}|${wi}`;
+      const v = saved[k] || '';
+      html += `<td><select class="cell-select" onchange="window._saveCell('${k}',this.value)"><option value="">— 未指定 —</option>${memberData.map(m=>`<option value="${m.name}"${v===m.name?' selected':''}>${m.name}</option>`).join('')}</select></td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  document.getElementById('scheduleTable').innerHTML = html;
+}
+
+window._saveCell = saveCell;
+
+// ── PROFILE ──
+function getChar(name) { return name ? name[name.length-1] : '?'; }
+
+function renderProfile() {
+  const grid = document.getElementById('profileGrid');
+  grid.innerHTML = memberData.map((m, i) => `
+    <div class="member-card">
+      <div class="photo-area" onclick="window.openEditModal(${i})">
+        ${m.photo ? `<img src="${m.photo}" />` : `<div class="char-bg">${getChar(m.name)}</div>`}
+        <div class="photo-hover">✏ 編輯</div>
+      </div>
+      <div class="card-info">
+        <div class="card-no">No.${String(i+1).padStart(2,'0')}</div>
+        <div class="card-name" onclick="window.openEditModal(${i})">${m.name}</div><br>
+        ${m.role ? `<div class="card-role">${m.role}</div>` : ''}
+      </div>
+    </div>`).join('');
+  const t = `共 ${memberData.length} 位組員`;
+  document.getElementById('profileCount').textContent = t;
+  document.getElementById('profileCount2').textContent = t;
+}
+
+// ── LEADER AUTH ──
+const LEADER_NAME = '守仁';
+const LEADER_PASSWORD = '5277';
+let currentUser = null;
+window._isLeader = false;
+
+function isLeader() { return window._isLeader; }
+
+function updatePermission() {
+  const leader = isLeader();
+  document.getElementById('leaderFields').style.display = leader ? 'block' : 'none';
+  document.getElementById('memberOnlyNote').style.display = 'none';
+  document.getElementById('deleteBtn').style.display = (leader && editingIdx >= 0) ? 'inline-block' : 'none';
+}
+
+window.toggleLeaderLogin = function() {
+  if (window._isLeader) return;
+  const box = document.getElementById('leaderLoginBox');
+  const visible = box.style.display === 'block';
+  box.style.display = visible ? 'none' : 'block';
+  if (!visible) setTimeout(() => document.getElementById('leaderPwInput').focus(), 50);
+};
+
+window.submitLeaderLogin = function() {
+  const pw = document.getElementById('leaderPwInput').value;
+  if (pw === LEADER_PASSWORD) {
+    window._isLeader = true;
+    currentUser = LEADER_NAME;
+    document.getElementById('leaderLoginBox').style.display = 'none';
+    document.getElementById('leaderPwInput').value = '';
+    document.getElementById('leaderPwError').style.display = 'none';
+    const btn = document.getElementById('leaderLoginBtn');
+    btn.textContent = '★ 小組長';
+    btn.style.color = '#e05a00';
+    btn.style.borderColor = '#e05a00';
+    btn.onclick = null;
+    btn.style.cursor = 'default';
+  } else {
+    document.getElementById('leaderPwError').style.display = 'block';
+    document.getElementById('leaderPwInput').value = '';
+    document.getElementById('leaderPwInput').focus();
+  }
+};
+
+// ── MODALS ──
+window.openEditModal = function(i) {
+  editingIdx = i;
+  tempPhoto = memberData[i].photo;
+  document.getElementById('modalTitle').textContent = '編輯組員';
+  document.getElementById('editName').value = memberData[i].name;
+  document.getElementById('editRole').value = memberData[i].role;
+  document.getElementById('photoPreview').textContent = memberData[i].photo ? '已有照片' : '';
+  document.getElementById('modalBg').classList.add('open');
+  updatePermission();
+};
+
+window.openAddModal = function() {
+  editingIdx = -1; tempPhoto = null;
+  document.getElementById('modalTitle').textContent = '新增組員';
+  document.getElementById('editName').value = '';
+  document.getElementById('editRole').value = '';
+  document.getElementById('photoPreview').textContent = '';
+  document.getElementById('modalBg').classList.add('open');
+  updatePermission();
+};
+
+window.closeModal = function() { document.getElementById('modalBg').classList.remove('open'); };
+
+window.saveMember = function() {
+  const leader = isLeader();
+  if (leader) {
+    const name = document.getElementById('editName').value.trim();
+    const role = document.getElementById('editRole').value.trim();
+    if (!name) return;
+    if (editingIdx >= 0) {
+      memberData[editingIdx].name = name;
+      memberData[editingIdx].role = role;
+      if (tempPhoto) memberData[editingIdx].photo = tempPhoto;
+    } else {
+      memberData.push({ name, role, photo: tempPhoto, order: memberData.length });
+    }
+  } else {
+    if (editingIdx >= 0 && tempPhoto) memberData[editingIdx].photo = tempPhoto;
+  }
+  saveMembers();
+  window.closeModal();
+  renderProfile();
+};
+
+window.deleteMember = function() {
+  if (editingIdx < 0) return;
+  memberData.splice(editingIdx, 1);
+  saveMembers();
+  window.closeModal();
+  renderProfile();
+};
+
+window.handlePhoto = function(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => { tempPhoto = ev.target.result; document.getElementById('photoPreview').textContent = '已選取：' + file.name; };
+  reader.readAsDataURL(file);
+};
+
+document.getElementById('modalBg').addEventListener('click', function(e) { if (e.target === this) window.closeModal(); });
+
+document.addEventListener('click', function(e) {
+  const box = document.getElementById('leaderLoginBox');
+  const btn = document.getElementById('leaderLoginBtn');
+  if (box && !box.contains(e.target) && e.target !== btn) box.style.display = 'none';
+});
+
+// ── ADD MONTH ──
+window.openAddMonth = function() {
+  document.getElementById('addMonthOverlay').style.display = 'flex';
+  document.getElementById('addMonthYear').value = '2026';
+  document.getElementById('addMonthSel').value = '';
+  document.getElementById('addMonthError').style.display = 'none';
+};
+
+window.closeAddMonth = function() {
+  document.getElementById('addMonthOverlay').style.display = 'none';
+};
+
+window.confirmAddMonth = function() {
+  const year = parseInt(document.getElementById('addMonthYear').value);
+  const month = parseInt(document.getElementById('addMonthSel').value);
+  if (!month || !year || year < 2020 || year > 2099) {
+    document.getElementById('addMonthError').style.display = 'block';
+    return;
+  }
+  const key = year + '-' + String(month).padStart(2,'0');
+  if (monthOrder.includes(key)) {
+    document.getElementById('addMonthError').textContent = '此月份已存在';
+    document.getElementById('addMonthError').style.display = 'block';
+    return;
+  }
+  monthOrder.push(key);
+  saveMonths();
+  window.closeAddMonth();
+  currentScheduleTab = key;
+  renderSidebarTabs();
+  renderSchedule();
+};
+
+</script>
+</body>
+</html>
