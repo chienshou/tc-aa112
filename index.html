@@ -160,11 +160,13 @@ tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
 
   .bottom-nav-add {
     flex-shrink: 0; width: 30px; height: 30px;
-    border-radius: 6px; border: 1.5px dashed var(--border);
+    border-radius: 6px; border: none;
     background: transparent; color: var(--text-muted);
-    font-size: 18px; cursor: pointer;
+    font-size: 24px; font-weight: 900; cursor: pointer;
     display: flex; align-items: center; justify-content: center;
+    transition: color 0.15s;
   }
+  .bottom-nav-add:active { color: var(--accent); }
 
   /* Pages fill full screen minus bottom nav */
   .page, .profile-page { padding-bottom: 56px; }
@@ -228,10 +230,10 @@ tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
 .icebox-link:hover { text-decoration: underline; }
 .icebox-meta { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
 .icebox-uploader { background: var(--surface); border-radius: 4px; padding: 2px 7px; font-size: 11px; color: var(--text-muted); }
-.icebox-edit-btn { font-size: 11px; color: var(--text-muted); border: none; background: transparent; cursor: pointer; padding: 2px 6px; border-radius: 4px; transition: background 0.12s; }
-.icebox-edit-btn:hover { background: var(--border-light); color: var(--text); }
-.icebox-del-btn { font-size: 11px; color: #c33; border: none; background: transparent; cursor: pointer; padding: 2px 6px; border-radius: 4px; }
-.icebox-del-btn:hover { background: #fee; }
+.icebox-edit-btn { font-size: 12px; color: var(--text-muted); border: 1px solid var(--border); background: var(--white); cursor: pointer; padding: 4px 10px; border-radius: 5px; transition: background 0.12s; font-family: inherit; }
+.icebox-edit-btn:hover, .icebox-edit-btn:active { background: var(--border-light); color: var(--text); }
+.icebox-del-btn { font-size: 12px; color: #c33; border: 1px solid #f5c1c1; background: var(--white); cursor: pointer; padding: 4px 10px; border-radius: 5px; font-family: inherit; }
+.icebox-del-btn:hover, .icebox-del-btn:active { background: #fee; }
 .icebox-add-bar { position: fixed; bottom: 0; left: var(--sidebar-w); right: 0; background: var(--bg); border-top: 1px solid var(--border); padding: 12px 32px; z-index: 30; }
 .icebox-add-row { display: flex; gap: 8px; align-items: center; }
 .icebox-input { flex: 1; border: 1px solid var(--border); border-radius: 7px; padding: 8px 10px; font-size: 13px; font-family: inherit; outline: none; color: var(--text); background: var(--white); transition: border-color 0.15s; }
@@ -242,9 +244,13 @@ tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
 @media (max-width: 768px) {
   .icebox-header { padding: 16px 16px 0; }
   .icebox-title-main, .icebox-title-sub { font-size: 46px; }
-  .icebox-content { padding: 12px 16px 140px; }
-  .icebox-add-bar { left: 0; padding: 10px 16px; }
-  .icebox-add-row { flex-wrap: wrap; }
+  .icebox-content { padding: 12px 16px 160px; }
+  .icebox-add-bar { left: 0; padding: 10px 16px 12px; }
+  .icebox-add-row { flex-wrap: nowrap; gap: 6px; }
+  .icebox-uploader-select { min-width: 80px; max-width: 90px; font-size: 12px; padding: 6px 6px; }
+  .icebox-input { font-size: 12px; padding: 7px 6px; }
+  .icebox-submit-btn { padding: 7px 12px; font-size: 12px; white-space: nowrap; flex-shrink: 0; }
+  #iceboxPlayers { max-width: 70px !important; }
 }
 </style>
 </head>
@@ -256,7 +262,7 @@ tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
     <div class="sidebar-top">
       <div class="sidebar-label">服事表</div>
       <div id="monthTabs" style="display:flex;flex-direction:column;align-items:center;gap:2px;width:100%;"></div>
-      <button id="addMonthBtn" onclick="openAddMonth()" title="新增月份" style="width:34px;height:34px;border-radius:5px;border:1.5px dashed var(--border);background:transparent;color:var(--text-muted);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:4px;transition:border-color 0.15s,color 0.15s;" onmouseenter="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseleave="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">+</button>
+      <button id="addMonthBtn" onclick="openAddMonth()" title="新增月份" style="width:34px;height:34px;border-radius:5px;border:none;background:transparent;color:var(--text-muted);font-size:22px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;margin-top:4px;transition:color 0.15s;" onmouseenter="this.style.color='var(--accent)'" onmouseleave="this.style.color='var(--text-muted)'">+</button>
     </div>
     <div class="sidebar-divider"></div>
     <button class="profile-tab-btn" id="tab-PROFILE" onclick="switchPage('PROFILE')"><span>組員</span></button>
@@ -324,7 +330,9 @@ tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
           <option value="">— 你是誰 —</option>
         </select>
         <input class="icebox-input" id="iceboxGameName" placeholder="遊戲名稱" />
-        <input class="icebox-input" id="iceboxPlayers" placeholder="適合人數" style="max-width:100px;" />
+        <input class="icebox-input" id="iceboxPlayers" placeholder="適合人數" style="max-width:90px;" />
+      </div>
+      <div class="icebox-add-row" style="margin-top:6px;">
         <input class="icebox-input" id="iceboxUrl" placeholder="連結（選填）" />
         <button class="icebox-submit-btn" onclick="submitIcebox()">上傳</button>
       </div>
@@ -359,13 +367,13 @@ tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
   <nav class="bottom-nav" id="bottomNav">
     <div class="bottom-nav-months" id="bottomMonths"></div>
     <button class="bottom-nav-add" onclick="openAddMonth()" title="新增月份">+</button>
-    <button class="bottom-nav-item" id="bnProfile" onclick="switchPage('PROFILE')">
-      <span class="nav-icon">&#128100;</span>
-      <span>組員</span>
-    </button>
     <button class="bottom-nav-item" id="bnIcebox" onclick="switchPage('ICEBOX')">
       <span class="nav-icon">&#127922;</span>
       <span>破冰庫</span>
+    </button>
+    <button class="bottom-nav-item" id="bnProfile" onclick="switchPage('PROFILE')">
+      <span class="nav-icon">🤠</span>
+      <span>組員</span>
     </button>
   </nav>
 
@@ -605,10 +613,9 @@ function renderIcebox() {
   }
 
   list.innerHTML = iceboxItems.map(item => {
-    const canEdit = window._isLeader || item.uploader === document.getElementById('iceboxUploader')?.value;
     const editBtns = `
-      <button class="icebox-edit-btn" onclick="editIcebox('${item.id}')">編輯</button>
-      <button class="icebox-del-btn" onclick="deleteIcebox('${item.id}')">刪除</button>`;
+      <button class="icebox-edit-btn" onclick="editIcebox('${item.id}')">✎ 編輯</button>
+      <button class="icebox-del-btn" onclick="deleteIcebox('${item.id}')">✕ 刪除</button>`;
     return `
     <div class="icebox-card" id="icard-${item.id}">
       <div class="icebox-card-top">
