@@ -223,7 +223,7 @@ tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
 .icebox-title-row { display: flex; align-items: baseline; gap: 10px; border-bottom: 2px solid var(--text); padding-bottom: 8px; margin-bottom: 0; }
 .icebox-title-main { font-family: 'Bebas Neue', sans-serif; font-size: 68px; font-weight: 900; color: var(--text); line-height: 1; letter-spacing: 3px; }
 .icebox-title-sub { font-family: 'Bebas Neue', sans-serif; font-size: 68px; font-weight: 900; color: var(--accent); line-height: 1; letter-spacing: 3px; }
-.icebox-content { flex: 1; overflow-y: auto; padding: 16px 32px 80px; }
+.icebox-content { flex: 1; overflow-y: auto; padding: 16px 32px 24px; }
 .icebox-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
 .icebox-card-top { display: flex; align-items: flex-start; gap: 10px; }
 .icebox-game-name { font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
@@ -235,23 +235,24 @@ tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
 .icebox-edit-btn:hover, .icebox-edit-btn:active { background: var(--border-light); color: var(--text); }
 .icebox-del-btn { font-size: 12px; color: #c33; border: 1px solid #f5c1c1; background: var(--white); cursor: pointer; padding: 4px 10px; border-radius: 5px; font-family: inherit; }
 .icebox-del-btn:hover, .icebox-del-btn:active { background: #fee; }
-.icebox-add-bar { position: fixed; bottom: 0; left: var(--sidebar-w); right: 0; background: var(--bg); border-top: 1px solid var(--border); padding: 12px 32px; z-index: 30; }
-.icebox-add-row { display: flex; gap: 8px; align-items: center; }
+.icebox-form { padding: 14px 32px 10px; border-bottom: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+.icebox-form-row { display: flex; gap: 8px; align-items: center; }
 .icebox-input { flex: 1; border: 1px solid var(--border); border-radius: 7px; padding: 8px 10px; font-size: 13px; font-family: inherit; outline: none; color: var(--text); background: var(--white); transition: border-color 0.15s; }
 .icebox-input:focus { border-color: var(--accent); }
-.icebox-submit-btn { border: none; background: var(--accent); color: #fff; border-radius: 7px; padding: 8px 16px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; }
-.icebox-uploader-select { border: 1px solid var(--border); border-radius: 7px; padding: 8px 10px; font-size: 13px; font-family: inherit; outline: none; color: var(--text); background: var(--white); cursor: pointer; }
+.icebox-players-input { max-width: 100px; flex: 0 0 100px; }
+.icebox-submit-btn { border: none; background: var(--accent); color: #fff; border-radius: 7px; padding: 8px 18px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; flex-shrink: 0; }
+.icebox-uploader-select { border: 1px solid var(--border); border-radius: 7px; padding: 8px 10px; font-size: 13px; font-family: inherit; outline: none; color: var(--text); background: var(--white); cursor: pointer; flex-shrink: 0; max-width: 110px; }
 
 @media (max-width: 768px) {
   .icebox-header { padding: 16px 16px 0; }
   .icebox-title-main, .icebox-title-sub { font-size: 46px; }
-  .icebox-content { padding: 12px 16px 160px; }
-  .icebox-add-bar { left: 0; padding: 10px 16px 12px; }
-  .icebox-add-row { flex-wrap: nowrap; gap: 6px; }
-  .icebox-uploader-select { min-width: 80px; max-width: 90px; font-size: 12px; padding: 6px 6px; }
+  .icebox-form { padding: 12px 16px 10px; }
+  .icebox-form-row { gap: 6px; flex-wrap: nowrap; }
+  .icebox-content { padding: 12px 16px 80px; }
+  .icebox-uploader-select { max-width: 88px; font-size: 12px; padding: 7px 6px; }
   .icebox-input { font-size: 12px; padding: 7px 6px; }
-  .icebox-submit-btn { padding: 7px 12px; font-size: 12px; white-space: nowrap; flex-shrink: 0; }
-  #iceboxPlayers { max-width: 70px !important; }
+  .icebox-players-input { max-width: 72px !important; flex: 0 0 72px !important; }
+  .icebox-submit-btn { padding: 7px 12px; font-size: 12px; }
 }
 </style>
 </head>
@@ -330,20 +331,20 @@ tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
         <span class="icebox-title-sub">寶庫</span>
       </div>
     </div>
-    <div class="icebox-content" id="iceboxList"></div>
-    <div class="icebox-add-bar">
-      <div class="icebox-add-row">
+    <div class="icebox-form">
+      <div class="icebox-form-row">
         <select class="icebox-uploader-select" id="iceboxUploader">
           <option value="">— 你是誰 —</option>
         </select>
         <input class="icebox-input" id="iceboxGameName" placeholder="遊戲名稱" />
-        <input class="icebox-input" id="iceboxPlayers" placeholder="適合人數" style="max-width:90px;" />
+        <input class="icebox-input icebox-players-input" id="iceboxPlayers" placeholder="適合人數" />
       </div>
-      <div class="icebox-add-row" style="margin-top:6px;">
-        <input class="icebox-input" id="iceboxUrl" placeholder="連結（選填）" />
-        <button class="icebox-submit-btn" onclick="submitIcebox()">上傳</button>
+      <div class="icebox-form-row">
+        <input class="icebox-input" id="iceboxUrl" placeholder="連結（選填）" style="flex:1;" />
+        <button class="icebox-submit-btn" onclick="submitIcebox()">＋ 上傳</button>
       </div>
     </div>
+    <div class="icebox-content" id="iceboxList"></div>
   </div>
 
   <!-- ADD MONTH MODAL -->
@@ -399,6 +400,19 @@ tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
     <input type="file" class="file-input" id="photoInput" accept="image/*" onchange="handlePhoto(event)" />
     <button class="add-btn" style="width:100%;border-radius:4px;margin-top:6px;font-size:12px;padding:7px;" onclick="document.getElementById('photoInput').click()">選擇照片</button>
     <div id="photoPreview" style="margin-top:6px;font-size:11px;color:#999;"></div>
+    <div id="photoControls" style="display:none;margin-top:10px;background:var(--surface);border-radius:8px;padding:10px 12px;">
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;font-weight:700;">照片調整</div>
+      <div style="display:flex;gap:8px;margin-bottom:8px;">
+        <button id="fitCover" onclick="setPhotoFit('cover')" style="flex:1;border:1.5px solid var(--accent);background:var(--accent);color:#fff;border-radius:5px;padding:5px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">填滿</button>
+        <button id="fitContain" onclick="setPhotoFit('contain')" style="flex:1;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);border-radius:5px;padding:5px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;">完整顯示</button>
+      </div>
+      <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">縮放</div>
+      <input type="range" id="photoZoom" min="50" max="200" value="100" oninput="updatePhotoZoom(this.value)" style="width:100%;accent-color:var(--accent);" />
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-faint);"><span>縮小</span><span id="zoomVal">100%</span><span>放大</span></div>
+      <div id="photoPreviewBox" style="margin-top:10px;width:100%;aspect-ratio:1/1;background:#252525;border-radius:6px;overflow:hidden;position:relative;">
+        <img id="photoPreviewImg" src="" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(1);transition:transform 0.1s;object-fit:cover;width:100%;height:100%;" />
+      </div>
+    </div>
     <div class="modal-actions">
       <button class="btn-delete" id="deleteBtn" onclick="deleteMember()">刪除組員</button>
       <button class="btn-cancel" onclick="closeModal()">取消</button>
@@ -833,7 +847,7 @@ function renderProfile() {
   grid.innerHTML = memberData.map((m, i) => `
     <div class="member-card">
       <div class="photo-area" onclick="window.openEditModal(${i})">
-        ${m.photo ? `<img src="${m.photo}" />` : `<div class="char-bg">${getChar(m.name)}</div>`}
+        ${m.photo ? `<img src="${m.photo}" style="object-fit:${m.photoFit||'cover'};transform:translate(-50%,-50%) scale(${(m.photoZoom||100)/100});position:absolute;top:50%;left:50%;width:100%;height:100%;" />` : `<div class="char-bg">${getChar(m.name)}</div>`}
         <div class="photo-hover">✏ 編輯</div>
       </div>
       <div class="card-info">
@@ -899,20 +913,32 @@ window.submitLeaderLogin = function() {
 window.openEditModal = function(i) {
   editingIdx = i;
   tempPhoto = memberData[i].photo;
+  tempPhotoFit = memberData[i].photoFit || 'cover';
+  tempPhotoZoom = memberData[i].photoZoom || 100;
   document.getElementById('modalTitle').textContent = '編輯組員';
   document.getElementById('editName').value = memberData[i].name;
   document.getElementById('editRole').value = memberData[i].role;
   document.getElementById('photoPreview').textContent = memberData[i].photo ? '已有照片' : '';
+  // Show controls if photo exists
+  const controls = document.getElementById('photoControls');
+  if (memberData[i].photo) {
+    controls.style.display = 'block';
+    document.getElementById('photoPreviewImg').src = memberData[i].photo;
+    setTimeout(() => applyPhotoPreview(), 50);
+  } else {
+    controls.style.display = 'none';
+  }
   document.getElementById('modalBg').classList.add('open');
   updatePermission();
 };
 
 window.openAddModal = function() {
-  editingIdx = -1; tempPhoto = null;
+  editingIdx = -1; tempPhoto = null; tempPhotoFit = 'cover'; tempPhotoZoom = 100;
   document.getElementById('modalTitle').textContent = '新增組員';
   document.getElementById('editName').value = '';
   document.getElementById('editRole').value = '';
   document.getElementById('photoPreview').textContent = '';
+  document.getElementById('photoControls').style.display = 'none';
   document.getElementById('modalBg').classList.add('open');
   updatePermission();
 };
@@ -928,12 +954,20 @@ window.saveMember = function() {
     if (editingIdx >= 0) {
       memberData[editingIdx].name = name;
       memberData[editingIdx].role = role;
-      if (tempPhoto) memberData[editingIdx].photo = tempPhoto;
+      if (tempPhoto) {
+        memberData[editingIdx].photo = tempPhoto;
+        memberData[editingIdx].photoFit = tempPhotoFit;
+        memberData[editingIdx].photoZoom = tempPhotoZoom;
+      }
     } else {
-      memberData.push({ name, role, photo: tempPhoto, order: memberData.length });
+      memberData.push({ name, role, photo: tempPhoto, photoFit: tempPhotoFit, photoZoom: tempPhotoZoom, order: memberData.length });
     }
   } else {
-    if (editingIdx >= 0 && tempPhoto) memberData[editingIdx].photo = tempPhoto;
+    if (editingIdx >= 0 && tempPhoto) {
+      memberData[editingIdx].photo = tempPhoto;
+      memberData[editingIdx].photoFit = tempPhotoFit;
+      memberData[editingIdx].photoZoom = tempPhotoZoom;
+    }
   }
   saveMembers();
   window.closeModal();
@@ -948,12 +982,56 @@ window.deleteMember = function() {
   renderProfile();
 };
 
+let tempPhotoFit = 'cover';
+let tempPhotoZoom = 100;
+
 window.handlePhoto = function(e) {
   const file = e.target.files[0]; if (!file) return;
   const reader = new FileReader();
-  reader.onload = ev => { tempPhoto = ev.target.result; document.getElementById('photoPreview').textContent = '已選取：' + file.name; };
+  reader.onload = ev => {
+    tempPhoto = ev.target.result;
+    document.getElementById('photoPreview').textContent = '已選取：' + file.name;
+    // Show controls
+    const controls = document.getElementById('photoControls');
+    controls.style.display = 'block';
+    const img = document.getElementById('photoPreviewImg');
+    img.src = tempPhoto;
+    // Reset settings to existing or default
+    const existing = editingIdx >= 0 ? memberData[editingIdx] : null;
+    tempPhotoFit = existing?.photoFit || 'cover';
+    tempPhotoZoom = existing?.photoZoom || 100;
+    applyPhotoPreview();
+  };
   reader.readAsDataURL(file);
 };
+
+window.setPhotoFit = function(fit) {
+  tempPhotoFit = fit;
+  document.getElementById('fitCover').style.background = fit === 'cover' ? 'var(--accent)' : 'transparent';
+  document.getElementById('fitCover').style.color = fit === 'cover' ? '#fff' : 'var(--text-muted)';
+  document.getElementById('fitCover').style.borderColor = fit === 'cover' ? 'var(--accent)' : 'var(--border)';
+  document.getElementById('fitContain').style.background = fit === 'contain' ? 'var(--accent)' : 'transparent';
+  document.getElementById('fitContain').style.color = fit === 'contain' ? '#fff' : 'var(--text-muted)';
+  document.getElementById('fitContain').style.borderColor = fit === 'contain' ? 'var(--accent)' : 'var(--border)';
+  applyPhotoPreview();
+};
+
+window.updatePhotoZoom = function(val) {
+  tempPhotoZoom = parseInt(val);
+  document.getElementById('zoomVal').textContent = val + '%';
+  applyPhotoPreview();
+};
+
+function applyPhotoPreview() {
+  const img = document.getElementById('photoPreviewImg');
+  if (!img) return;
+  const scale = tempPhotoZoom / 100;
+  img.style.objectFit = tempPhotoFit;
+  img.style.transform = `translate(-50%,-50%) scale(${scale})`;
+  document.getElementById('photoZoom').value = tempPhotoZoom;
+  document.getElementById('zoomVal').textContent = tempPhotoZoom + '%';
+  setPhotoFit(tempPhotoFit);
+}
 
 document.getElementById('modalBg').addEventListener('click', function(e) { if (e.target === this) window.closeModal(); });
 
