@@ -35,7 +35,7 @@ html, body { height: 100%; background: var(--bg); font-family: 'Noto Sans TC', s
 /* SCHEDULE */
 .header { padding: 28px 36px 0; flex-shrink: 0; position: relative; }
 .top-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; align-items: center; }
-.month-en { font-family: 'Bebas Neue', sans-serif; font-size: 80px; color: var(--text); line-height: 0.9; letter-spacing: 1px; }
+.month-en { font-family: 'Bebas Neue', sans-serif; font-size: 80px; font-weight: 900; color: var(--text); line-height: 0.9; letter-spacing: 3px; }
 .month-sub { font-size: 13px; color: var(--text-muted); margin-top: 6px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1.5px solid var(--border); }
 .table-wrap { flex: 1; overflow-x: auto; overflow-y: auto; padding: 0 36px 32px; }
 table { border-collapse: collapse; min-width: 100%; }
@@ -71,8 +71,8 @@ tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
 .profile-header { padding: 24px 32px 0; flex-shrink: 0; }
 .profile-top-bar { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); margin-bottom: 10px; line-height: 1.6; }
 .profile-title-row { display: flex; align-items: baseline; gap: 14px; border-bottom: 2px solid var(--text); padding-bottom: 8px; }
-.title-solid { font-family: 'Bebas Neue', sans-serif; font-size: 60px; color: var(--text); line-height: 1; letter-spacing: 2px; }
-.title-outline { font-family: 'Bebas Neue', sans-serif; font-size: 60px; -webkit-text-stroke: 2px var(--text); color: transparent; line-height: 1; letter-spacing: 2px; }
+.title-solid { font-family: 'Bebas Neue', sans-serif; font-size: 60px; font-weight: 900; color: var(--text); line-height: 1; letter-spacing: 3px; }
+.title-outline { font-family: 'Bebas Neue', sans-serif; font-size: 60px; font-weight: 900; color: var(--accent); line-height: 1; letter-spacing: 3px; }
 .profile-grid-wrap { flex: 1; overflow-y: auto; padding: 0 32px 20px; }
 .profile-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-left: 1px solid var(--border); border-top: 1px solid var(--border); }
 .member-card { border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
@@ -177,13 +177,15 @@ tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
   .month-sub { font-size: 12px; margin-bottom: 12px; padding-bottom: 12px; }
 
   /* Table */
-  .table-wrap { padding: 0 0 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  .col-head-inner { min-width: 90px; padding: 8px 6px 10px; }
-  .col-date { font-size: 14px; }
-  .col-wk { font-size: 10px; }
-  .cell-select { min-width: 80px; font-size: 12px; padding: 6px 20px 6px 7px; }
-  .row-label { font-size: 11px; padding: 6px 8px 6px 12px; min-width: 60px; }
-  thead th:first-child { width: 68px; min-width: 68px; }
+  .table-wrap { padding: 0 0 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; }
+  .col-head-inner { min-width: 0; width: 70px; padding: 6px 4px 8px; }
+  .col-date { font-size: 13px; }
+  .col-wk { font-size: 9px; }
+  .cell-select { min-width: 0; width: 100%; font-size: 11px; padding: 5px 18px 5px 5px; background-position: right 5px center; }
+  .row-label { font-size: 10px; padding: 5px 6px 5px 8px; min-width: 0; width: 52px; max-width: 52px; overflow: hidden; }
+  thead th:first-child { width: 52px; min-width: 52px; }
+  table { width: 100%; }
+  tbody tr td { padding: 5px 4px; }
 
   /* Leader login box */
   #leaderLoginBox { right: 8px !important; top: 56px !important; width: 180px !important; }
@@ -191,6 +193,7 @@ tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
   /* Profile page */
   .profile-header { padding: 16px 16px 0; }
   .title-solid, .title-outline { font-size: 40px; }
+  .icebox-title-main, .icebox-title-sub { font-size: 40px; }
   .profile-grid { grid-template-columns: repeat(2, 1fr); }
   .profile-grid-wrap { padding: 0 16px 16px; }
   .profile-footer { padding: 10px 16px 12px; }
@@ -209,6 +212,40 @@ tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
 @media (min-width: 769px) {
   .bottom-nav { display: none; }
 }
+
+/* ── 破冰寶庫 ── */
+.icebox-page { flex: 1; display: none; flex-direction: column; overflow: hidden; background: var(--bg); }
+.icebox-page.active { display: flex; }
+.icebox-header { padding: 24px 32px 0; flex-shrink: 0; }
+.icebox-title-row { display: flex; align-items: baseline; gap: 10px; border-bottom: 2px solid var(--text); padding-bottom: 8px; margin-bottom: 0; }
+.icebox-title-main { font-family: 'Bebas Neue', sans-serif; font-size: 68px; font-weight: 900; color: var(--text); line-height: 1; letter-spacing: 3px; }
+.icebox-title-sub { font-family: 'Bebas Neue', sans-serif; font-size: 68px; font-weight: 900; color: var(--accent); line-height: 1; letter-spacing: 3px; }
+.icebox-content { flex: 1; overflow-y: auto; padding: 16px 32px 80px; }
+.icebox-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
+.icebox-card-top { display: flex; align-items: flex-start; gap: 10px; }
+.icebox-game-name { font-size: 15px; font-weight: 700; color: var(--text); flex: 1; }
+.icebox-link { font-size: 12px; color: var(--accent); word-break: break-all; text-decoration: none; }
+.icebox-link:hover { text-decoration: underline; }
+.icebox-meta { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+.icebox-uploader { background: var(--surface); border-radius: 4px; padding: 2px 7px; font-size: 11px; color: var(--text-muted); }
+.icebox-edit-btn { font-size: 11px; color: var(--text-muted); border: none; background: transparent; cursor: pointer; padding: 2px 6px; border-radius: 4px; transition: background 0.12s; }
+.icebox-edit-btn:hover { background: var(--border-light); color: var(--text); }
+.icebox-del-btn { font-size: 11px; color: #c33; border: none; background: transparent; cursor: pointer; padding: 2px 6px; border-radius: 4px; }
+.icebox-del-btn:hover { background: #fee; }
+.icebox-add-bar { position: fixed; bottom: 0; left: var(--sidebar-w); right: 0; background: var(--bg); border-top: 1px solid var(--border); padding: 12px 32px; z-index: 30; }
+.icebox-add-row { display: flex; gap: 8px; align-items: center; }
+.icebox-input { flex: 1; border: 1px solid var(--border); border-radius: 7px; padding: 8px 10px; font-size: 13px; font-family: inherit; outline: none; color: var(--text); background: var(--white); transition: border-color 0.15s; }
+.icebox-input:focus { border-color: var(--accent); }
+.icebox-submit-btn { border: none; background: var(--accent); color: #fff; border-radius: 7px; padding: 8px 16px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; }
+.icebox-uploader-select { border: 1px solid var(--border); border-radius: 7px; padding: 8px 10px; font-size: 13px; font-family: inherit; outline: none; color: var(--text); background: var(--white); cursor: pointer; }
+
+@media (max-width: 768px) {
+  .icebox-header { padding: 16px 16px 0; }
+  .icebox-title-main, .icebox-title-sub { font-size: 46px; }
+  .icebox-content { padding: 12px 16px 140px; }
+  .icebox-add-bar { left: 0; padding: 10px 16px; }
+  .icebox-add-row { flex-wrap: wrap; }
+}
 </style>
 </head>
 <body>
@@ -223,6 +260,7 @@ tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
     </div>
     <div class="sidebar-divider"></div>
     <button class="profile-tab-btn" id="tab-PROFILE" onclick="switchPage('PROFILE')"><span>組員</span></button>
+    <button class="profile-tab-btn" id="tab-ICEBOX" onclick="switchPage('ICEBOX')"><span>破冰</span><span>庫</span></button>
   </div>
 
   <!-- SCHEDULE PAGE -->
@@ -255,14 +293,41 @@ tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
         <div style="text-align:right"><div id="profileCount">共 8 位組員</div></div>
       </div>
       <div class="profile-title-row">
-        <span class="title-solid">MEMBER</span>
-        <span class="title-outline">PROFILE</span>
+        <span class="icebox-title-main">MEMBER</span>
+        <span class="icebox-title-sub">PROFILE</span>
       </div>
     </div>
     <div class="profile-grid-wrap"><div class="profile-grid" id="profileGrid"></div></div>
     <div class="profile-footer">
       <div class="count-label" id="profileCount2">共 8 位組員</div>
-      <button class="add-btn" onclick="openAddModal()">+ ADD 組員</button>
+      <button class="add-btn" id="addMemberBtn" onclick="openAddModal()" style="display:none;">+ ADD 組員</button>
+    </div>
+  </div>
+
+
+  <!-- 破冰寶庫 PAGE -->
+  <div class="icebox-page" id="page-ICEBOX">
+    <div class="icebox-header">
+      <div class="profile-top-bar">
+        <div><div>TC AA112</div><div>2026 春季</div></div>
+        <div style="text-align:right"><div id="iceboxCount">0 個遊戲</div></div>
+      </div>
+      <div class="icebox-title-row">
+        <span class="icebox-title-main">破冰</span>
+        <span class="icebox-title-sub">寶庫</span>
+      </div>
+    </div>
+    <div class="icebox-content" id="iceboxList"></div>
+    <div class="icebox-add-bar">
+      <div class="icebox-add-row">
+        <select class="icebox-uploader-select" id="iceboxUploader">
+          <option value="">— 你是誰 —</option>
+        </select>
+        <input class="icebox-input" id="iceboxGameName" placeholder="遊戲名稱" />
+        <input class="icebox-input" id="iceboxPlayers" placeholder="適合人數" style="max-width:100px;" />
+        <input class="icebox-input" id="iceboxUrl" placeholder="連結（選填）" />
+        <button class="icebox-submit-btn" onclick="submitIcebox()">上傳</button>
+      </div>
     </div>
   </div>
 
@@ -297,6 +362,10 @@ tbody tr:hover td:not(.row-label) { background: #f9f7f3; }
     <button class="bottom-nav-item" id="bnProfile" onclick="switchPage('PROFILE')">
       <span class="nav-icon">&#128100;</span>
       <span>組員</span>
+    </button>
+    <button class="bottom-nav-item" id="bnIcebox" onclick="switchPage('ICEBOX')">
+      <span class="nav-icon">&#127922;</span>
+      <span>破冰庫</span>
     </button>
   </nav>
 
@@ -360,8 +429,8 @@ let editingIdx = -1;
 let tempPhoto = null;
 let _suppressSave = false;
 
-const activityTypes = ['信息','禱告會','探訪','走禱','團契'];
-const rows = ['破冰','敬拜讚美','講道／分享','場地確認'];
+const activityTypes = ['信息','禱告會／走禱','探訪','團契','暫停','規劃週'];
+let rows = ['破冰','敬拜讚美','講道／分享','場地確認'];
 const MONTH_META = {
   1:{en:'JAN',zh:'一月'},2:{en:'FEB',zh:'二月'},3:{en:'MAR',zh:'三月'},4:{en:'APR',zh:'四月'},
   5:{en:'MAY',zh:'五月'},6:{en:'JUN',zh:'六月'},7:{en:'JUL',zh:'七月'},8:{en:'AUG',zh:'八月'},
@@ -398,13 +467,20 @@ onValue(ref(db, 'members'), snap => {
     memberData = Object.values(data).sort((a,b) => (a.order||0)-(b.order||0));
   } else {
     // First run: seed default members
-    const defaults = ['守仁','千千','洛克','惠絲','哲倫','恩可','好恩','瀚元'];
-    const roles = {守仁:'影視組',千千:'影視組',洛克:'影視組',惠絲:'小家長',哲倫:'小家長'};
+    const defaults = ['守仁','千千','洛克','惠絲','哲綸','恩可','好恩','瀚元'];
+    const roles = {守仁:'影視組',千千:'影視組',洛克:'影視組',惠絲:'小家長',哲綸:'小家長'};
     memberData = defaults.map((n,i) => ({ name: n, role: roles[n]||'', photo: null, order: i }));
     set(ref(db, 'members'), Object.fromEntries(memberData.map((m,i) => [i, m])));
   }
   if (currentPage === 'PROFILE') renderProfile();
   setSyncStatus('synced');
+});
+
+// Custom dates
+let customDates = {};
+onValue(ref(db, 'customDates'), snap => {
+  customDates = snap.val() || {};
+  if (currentPage === 'SCHEDULE' && currentScheduleTab) renderSchedule();
 });
 
 // Schedule data
@@ -424,7 +500,7 @@ onValue(ref(db, 'months'), snap => {
     monthOrder = data;
   } else {
     // First run: seed default months
-    monthOrder = ['2026-05','2026-06','2026-07'];
+    monthOrder = ['2026-04','2026-05','2026-06','2026-07'];
     set(ref(db, 'months'), monthOrder);
   }
   renderSidebarTabs();
@@ -434,6 +510,8 @@ onValue(ref(db, 'months'), snap => {
   }
   setSyncStatus('synced');
 });
+
+seedScheduleIfEmpty(db, set, update);
 
 // ── SAVE TO FIREBASE ──
 function saveCell(k, val) {
@@ -454,6 +532,167 @@ function saveMonths() {
   set(ref(db, 'months'), monthOrder).then(() => setSyncStatus('synced'));
 }
 
+function saveCustomDate(monthKey, wi, dateStr, dayStr) {
+  setSyncStatus('syncing');
+  if (!customDates[monthKey]) customDates[monthKey] = {};
+  customDates[monthKey][wi] = { date: dateStr, day: dayStr };
+  update(ref(db, 'customDates/' + monthKey), { [wi]: { date: dateStr, day: dayStr } }).then(() => setSyncStatus('synced'));
+  renderSchedule();
+}
+
+const WEEKDAYS = ['日','一','二','三','四','五','六'];
+
+// ── SEED SCHEDULE DATA ──
+function seedScheduleIfEmpty(db, set, update) {
+  const scheduleData = {
+    "2026-04|type|0": "規劃週",
+    "2026-04|type|1": "探訪",
+    "2026-05|type|0": "信息",
+    "2026-05|type|1": "信息",
+    "2026-05|type|2": "團契",
+    "2026-05|type|3": "信息",
+    "2026-06|type|0": "團契",
+    "2026-06|type|1": "探訪",
+    "2026-06|type|2": "暫停",
+    "2026-06|type|3": "規劃週",
+    "2026-07|type|0": "暫停"
+  };
+  onValue(ref(db, 'schedule'), snap => {
+    const existing = snap.val() || {};
+    const updates = {};
+    Object.entries(scheduleData).forEach(([k, v]) => {
+      updates[k] = v;
+    });
+    if (Object.keys(updates).length > 0) update(ref(db, 'schedule'), updates);
+  }, { onlyOnce: true });
+
+  onValue(ref(db, 'customDates'), snap => {
+    if (!snap.val() || !snap.val()['2026-04']) {
+      set(ref(db, 'customDates/2026-04'), {
+        0: { date: '4/22', day: '週三' },
+        1: { date: '4/29', day: '週三' }
+      });
+    }
+  }, { onlyOnce: true });
+}
+// ── 破冰寶庫 ──
+let iceboxItems = [];
+
+onValue(ref(db, 'icebox'), snap => {
+  const data = snap.val() || {};
+  iceboxItems = Object.entries(data).map(([id, v]) => ({ id, ...v }))
+    .sort((a, b) => (b.ts || 0) - (a.ts || 0));
+  if (currentPage === 'ICEBOX') renderIcebox();
+});
+
+function renderIcebox() {
+  const list = document.getElementById('iceboxList');
+  const count = document.getElementById('iceboxCount');
+  if (!list) return;
+  if (count) count.textContent = `${iceboxItems.length} 個遊戲`;
+
+  // populate uploader select
+  const sel = document.getElementById('iceboxUploader');
+  if (sel) {
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">— 你是誰 —</option>' +
+      memberData.map(m => `<option value="${m.name}"${cur===m.name?' selected':''}>${m.name}</option>`).join('');
+  }
+
+  if (iceboxItems.length === 0) {
+    list.innerHTML = `<div style="text-align:center;color:var(--text-muted);font-size:13px;padding:40px 0;">還沒有遊戲，快來上傳第一個！</div>`;
+    return;
+  }
+
+  list.innerHTML = iceboxItems.map(item => {
+    const canEdit = window._isLeader || item.uploader === document.getElementById('iceboxUploader')?.value;
+    const editBtns = `
+      <button class="icebox-edit-btn" onclick="editIcebox('${item.id}')">編輯</button>
+      <button class="icebox-del-btn" onclick="deleteIcebox('${item.id}')">刪除</button>`;
+    return `
+    <div class="icebox-card" id="icard-${item.id}">
+      <div class="icebox-card-top">
+        <div class="icebox-game-name">${item.name || '（未命名）'}</div>
+        <div>${editBtns}</div>
+      </div>
+      ${item.url ? `<a class="icebox-link" href="${item.url}" target="_blank" rel="noopener">${item.url}</a>` : ''}
+      <div class="icebox-meta">
+        <span class="icebox-uploader">${item.uploader || '匿名'}</span>
+        ${item.players ? `<span style="background:var(--accent-light);color:var(--accent);border-radius:4px;padding:2px 7px;font-size:11px;font-weight:700;">👥 ${item.players}</span>` : ''}
+        <span>${item.dateStr || ''}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.submitIcebox = function() {
+  const uploader = document.getElementById('iceboxUploader').value;
+  const name = document.getElementById('iceboxGameName').value.trim();
+  const url = document.getElementById('iceboxUrl').value.trim();
+  const players = document.getElementById('iceboxPlayers').value.trim();
+  if (!uploader) { alert('請先選擇你的名字'); return; }
+  if (!name) { alert('請輸入遊戲名稱'); return; }
+  const id = Date.now().toString();
+  const now = new Date();
+  const dateStr = `${now.getMonth()+1}/${now.getDate()}`;
+  const item = { name, url, players, uploader, ts: Date.now(), dateStr };
+  setSyncStatus('syncing');
+  set(ref(db, 'icebox/' + id), item).then(() => {
+    setSyncStatus('synced');
+    document.getElementById('iceboxGameName').value = '';
+    document.getElementById('iceboxUrl').value = '';
+    document.getElementById('iceboxPlayers').value = '';
+  });
+};
+
+window.deleteIcebox = function(id) {
+  const item = iceboxItems.find(i => i.id === id);
+  const curUploader = document.getElementById('iceboxUploader')?.value;
+  if (!window._isLeader && item?.uploader !== curUploader) {
+    alert('只有上傳者或小組長可以刪除'); return;
+  }
+  if (!confirm('確定刪除？')) return;
+  setSyncStatus('syncing');
+  set(ref(db, 'icebox/' + id), null).then(() => setSyncStatus('synced'));
+};
+
+window.editIcebox = function(id) {
+  const item = iceboxItems.find(i => i.id === id);
+  if (!item) return;
+  const curUploader = document.getElementById('iceboxUploader')?.value;
+  if (!window._isLeader && item.uploader !== curUploader) {
+    alert('只有上傳者或小組長可以編輯'); return;
+  }
+  const newName = prompt('遊戲名稱', item.name || '');
+  if (newName === null) return;
+  const newUrl = prompt('連結（可留空）', item.url || '');
+  if (newUrl === null) return;
+  const newPlayers = prompt('適合人數（可留空）', item.players || '');
+  if (newPlayers === null) return;
+  setSyncStatus('syncing');
+  update(ref(db, 'icebox/' + id), { name: newName.trim(), url: newUrl.trim(), players: newPlayers.trim() })
+    .then(() => setSyncStatus('synced'));
+};
+
+window.removeRow = function(ri) {
+  if (!confirm(`確定要移除「${rows[ri]}」欄位嗎？`)) return;
+  rows.splice(ri, 1);
+  renderSchedule();
+};
+
+window.editDate = function(monthKey, wi, currentDate) {
+  const val = prompt('修改日期（格式：月/日，例如 5/7）', currentDate);
+  if (!val || !val.trim()) return;
+  const parts = val.trim().split('/');
+  if (parts.length !== 2) return;
+  const [m, d] = parts.map(Number);
+  if (!m || !d) return;
+  const year = parseInt(monthKey.split('-')[0]);
+  const dateObj = new Date(year, m - 1, d);
+  const dayStr = '週' + WEEKDAYS[dateObj.getDay()];
+  saveCustomDate(monthKey, wi, val.trim(), dayStr);
+};
+
 // ── SIDEBAR ──
 function renderSidebarTabs() {
   const container = document.getElementById('monthTabs');
@@ -471,29 +710,35 @@ function renderBottomNav() {
     `<button class="bottom-nav-month-btn${key === currentScheduleTab ? ' active' : ''}" onclick="switchSchedule('${key}')">${monthKeyLabel(key)}</button>`
   ).join('');
   if (bnProfile) bnProfile.classList.toggle('active', currentPage === 'PROFILE');
+  const bnIcebox = document.getElementById('bnIcebox');
+  if (bnIcebox) bnIcebox.classList.toggle('active', currentPage === 'ICEBOX');
 }
 
 window.switchSchedule = function(tab) {
   currentScheduleTab = tab;
   currentPage = 'SCHEDULE';
-  document.querySelectorAll('.page, .profile-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.page, .profile-page, .icebox-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.profile-tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('page-SCHEDULE').classList.add('active');
-  document.getElementById('tab-PROFILE').classList.remove('active');
   renderSidebarTabs();
   renderSchedule();
 };
 
 window.switchPage = function(page) {
   currentPage = page;
-  document.querySelectorAll('.page, .profile-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.page, .profile-page, .icebox-page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.profile-tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   if (page === 'PROFILE') {
     document.getElementById('page-PROFILE').classList.add('active');
     document.getElementById('tab-PROFILE').classList.add('active');
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     renderProfile();
+  } else if (page === 'ICEBOX') {
+    document.getElementById('page-ICEBOX').classList.add('active');
+    document.getElementById('tab-ICEBOX').classList.add('active');
+    renderIcebox();
   } else {
     document.getElementById('page-SCHEDULE').classList.add('active');
-    document.getElementById('tab-PROFILE').classList.remove('active');
     renderSidebarTabs();
     renderSchedule();
   }
@@ -508,8 +753,14 @@ function renderSchedule() {
   document.getElementById('monthSub').textContent = m.zh + ' · 每週三';
   const weeks = m.weeks;
   let html = '<thead><tr><th><div style="height:60px;"></div></th>';
-  weeks.forEach(w => {
-    html += `<th><div class="col-head-inner"><div class="col-wk">${w.wk}</div><div class="col-date">${w.date}</div><div class="col-day">週三</div></div></th>`;
+  weeks.forEach((w, wi) => {
+    const cd = customDates[currentScheduleTab] && customDates[currentScheduleTab][wi];
+    const displayDate = (cd && cd.date) ? cd.date : w.date;
+    const displayDay  = (cd && cd.day)  ? cd.day  : '週三';
+    const editIcon = window._isLeader
+      ? `<span onclick="editDate('${currentScheduleTab}',${wi},'${displayDate}')" style="cursor:pointer;font-size:9px;color:var(--accent);margin-left:3px;opacity:0.7;" title="編輯日期">✎</span>`
+      : '';
+    html += `<th><div class="col-head-inner"><div class="col-wk">${w.wk}</div><div class="col-date">${displayDate}${editIcon}</div><div class="col-day">${displayDay}</div></div></th>`;
   });
   html += '</tr></thead><tbody>';
   html += `<tr class="type-row"><td class="row-label type-label">小組內容</td>`;
@@ -519,8 +770,11 @@ function renderSchedule() {
     html += `<td><select class="cell-select type-sel" onchange="window._saveCell('${k}',this.value)"><option value="">— 類型 —</option>${activityTypes.map(t=>`<option value="${t}"${v===t?' selected':''}>${t}</option>`).join('')}</select></td>`;
   });
   html += '</tr>';
-  rows.forEach(row => {
-    html += `<tr><td class="row-label">${row}</td>`;
+  rows.forEach((row, ri) => {
+    const removeIcon = window._isLeader
+      ? `<span onclick="removeRow(${ri})" style="cursor:pointer;font-size:9px;color:#c33;margin-left:4px;opacity:0.6;" title="移除欄位">✕</span>`
+      : '';
+    html += `<tr><td class="row-label">${row}${removeIcon}</td>`;
     weeks.forEach((w,wi) => {
       const k = `${currentScheduleTab}|${row}|${wi}`;
       const v = saved[k] || '';
@@ -593,6 +847,10 @@ window.submitLeaderLogin = function() {
     btn.style.borderColor = '#e05a00';
     btn.onclick = null;
     btn.style.cursor = 'default';
+    const addBtn = document.getElementById('addMemberBtn');
+    if (addBtn) addBtn.style.display = 'inline-block';
+    if (currentPage === 'SCHEDULE') renderSchedule();
+    if (currentPage === 'PROFILE') renderProfile();
   } else {
     document.getElementById('leaderPwError').style.display = 'block';
     document.getElementById('leaderPwInput').value = '';
